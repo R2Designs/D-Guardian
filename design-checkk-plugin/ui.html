@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Design Guardian</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #eef1ec;
+        --bg-accent: radial-gradient(circle at top left, rgba(14, 165, 233, 0.14), transparent 34%);
+        --surface: rgba(255, 255, 255, 0.84);
+        --surface-strong: rgba(255, 255, 255, 0.94);
+        --surface-alt: rgba(243, 246, 241, 0.92);
+        --text: #131816;
+        --muted: #6d7670;
+        --line: rgba(19, 24, 22, 0.08);
+        --accent: #0f9b8e;
+        --accent-strong: #0d7f74;
+        --accent-soft: rgba(15, 155, 142, 0.14);
+        --warning: #c2410c;
+        --ok: #0f766e;
+        --ok-soft: rgba(15, 118, 110, 0.1);
+        --shadow: 0 18px 44px rgba(27, 38, 33, 0.08);
+        --card-shadow: 0 10px 24px rgba(22, 34, 29, 0.06);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --bg: #101614;
+          --bg-accent: radial-gradient(circle at top left, rgba(44, 212, 192, 0.18), transparent 36%);
+          --surface: rgba(24, 31, 28, 0.9);
+          --surface-strong: rgba(28, 36, 32, 0.96);
+          --surface-alt: rgba(34, 43, 39, 0.96);
+          --text: #edf3ef;
+          --muted: #9aa59e;
+          --line: rgba(237, 243, 239, 0.08);
+          --accent: #2cd4c0;
+          --accent-strong: #5fe7d7;
+          --accent-soft: rgba(44, 212, 192, 0.16);
+          --warning: #ffab7a;
+          --ok: #76eadf;
+          --ok-soft: rgba(44, 212, 192, 0.12);
+          --shadow: 0 22px 48px rgba(0, 0, 0, 0.3);
+          --card-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 16px;
+        background: var(--bg-accent), linear-gradient(180deg, var(--bg), var(--bg));
+        color: var(--text);
+        font: 12px/1.45 "Avenir Next", "Segoe UI", sans-serif;
+      }
+
+      .panel {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .hero,
+      .section,
+      .error,
+      .status {
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .hero {
+        background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+        border-radius: 20px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .eyebrow {
+        margin: 0 0 6px;
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .subcopy {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .summary {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .score {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+
+      .score strong {
+        font-size: 52px;
+        line-height: 1;
+        letter-spacing: -0.06em;
+      }
+
+      .score span,
+      .meta,
+      .checkbox-label span {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 8px 14px;
+        background: var(--accent-soft);
+        color: var(--accent-strong);
+        font-weight: 600;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        appearance: none;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface-strong);
+        color: var(--text);
+        padding: 10px 14px;
+        font: inherit;
+        cursor: pointer;
+        transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease,
+          background-color 140ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      button.primary {
+        border-color: var(--accent);
+        background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+        color: #ffffff;
+        box-shadow: 0 12px 22px rgba(15, 155, 142, 0.22);
+      }
+
+      .checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: 14px;
+        background: var(--surface-alt);
+        border: 1px solid var(--line);
+      }
+
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--accent);
+      }
+
+      .error,
+      .status {
+        display: none;
+        padding: 12px 14px;
+        border-radius: 14px;
+      }
+
+      .error {
+        background: rgba(194, 65, 12, 0.08);
+        color: var(--warning);
+      }
+
+      .status {
+        background: var(--ok-soft);
+        color: var(--ok);
+      }
+
+      .error.visible,
+      .status.visible {
+        display: block;
+      }
+
+      .section {
+        background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+        border-radius: 18px;
+        overflow: hidden;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 14px 16px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+
+      .count {
+        min-width: 28px;
+        text-align: center;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .issues {
+        padding: 8px;
+      }
+
+      .issue,
+      .empty {
+        border-radius: 14px;
+        background: var(--surface-alt);
+        box-shadow: var(--card-shadow);
+      }
+
+      .issue {
+        width: 100%;
+        text-align: left;
+        padding: 13px;
+        margin-bottom: 8px;
+        border: 1px solid transparent;
+      }
+
+      .issue:last-child {
+        margin-bottom: 0;
+      }
+
+      .issue:hover {
+        background: var(--accent-soft);
+        border-color: var(--accent-soft);
+      }
+
+      .issue-title {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .issue-meta,
+      .issue-detail,
+      .empty,
+      .footer {
+        margin: 4px 0 0;
+        color: var(--muted);
+      }
+
+      .issue-meta {
+        font-size: 11px;
+      }
+
+      .empty {
+        padding: 12px 13px;
+      }
+
+      .footer {
+        text-align: center;
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Selected frame only</p>
+          <h1>Design Guardian 🛡</h1>
+          <p id="frame-name" class="subcopy">Select a frame to scan</p>
+        </div>
+        <div class="summary">
+          <div>
+            <div class="score">
+              <strong id="issue-count">0</strong>
+              <span>Issues Found</span>
+            </div>
+            <p id="summary-meta" class="meta">Typography, spacing, line height, and color styles.</p>
+          </div>
+          <div id="summary-pill" class="pill">Ready</div>
+        </div>
+        <div class="controls">
+          <div class="actions">
+            <button id="scan" class="primary">Scan Frame</button>
+            <button id="resolve">Resolve All Issues</button>
+            <button id="close">Close</button>
+          </div>
+          <div class="checkbox-row">
+            <label class="checkbox-label" for="design-system">
+              <input id="design-system" type="checkbox" />
+              <span>Check with Design System</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <div id="error-box" class="error"></div>
+      <div id="status-box" class="status"></div>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Typography Issues</h2>
+          <span id="count-typography" class="count">0</span>
+        </div>
+        <div id="typography-list" class="issues"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Spacing Issues</h2>
+          <span id="count-spacing" class="count">0</span>
+        </div>
+        <div id="spacing-list" class="issues"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Color Issues</h2>
+          <span id="count-colors" class="count">0</span>
+        </div>
+        <div id="colors-list" class="issues"></div>
+      </section>
+
+      <div class="footer">Click any issue to select that layer inside Figma.</div>
+    </div>
+
+    <script>
+      const categoryMap = {
+        Typography: {
+          list: document.getElementById("typography-list"),
+          count: document.getElementById("count-typography")
+        },
+        Spacing: {
+          list: document.getElementById("spacing-list"),
+          count: document.getElementById("count-spacing")
+        },
+        Colors: {
+          list: document.getElementById("colors-list"),
+          count: document.getElementById("count-colors")
+        }
+      }
+
+      function post(type, payload) {
+        parent.postMessage({ pluginMessage: Object.assign({ type: type }, payload || {}) }, "*")
+      }
+
+      function setMessage(id, message, isVisible) {
+        const element = document.getElementById(id)
+        element.textContent = message
+        element.classList.toggle("visible", isVisible)
+      }
+
+      function clearAlerts() {
+        setMessage("error-box", "", false)
+        setMessage("status-box", "", false)
+      }
+
+      function setError(message) {
+        setMessage("status-box", "", false)
+        setMessage("error-box", message, Boolean(message))
+      }
+
+      function setStatus(message) {
+        setMessage("error-box", "", false)
+        setMessage("status-box", message, Boolean(message))
+      }
+
+      function createIssueButton(issue) {
+        const button = document.createElement("button")
+        button.className = "issue"
+        button.type = "button"
+        button.addEventListener("click", function () {
+          post("select-node", { nodeId: issue.nodeId })
+        })
+
+        const title = document.createElement("p")
+        title.className = "issue-title"
+        title.textContent = issue.nodeName
+
+        const meta = document.createElement("p")
+        meta.className = "issue-meta"
+        meta.textContent = issue.nodeType
+
+        const detail = document.createElement("p")
+        detail.className = "issue-detail"
+        detail.textContent = issue.description
+
+        button.appendChild(title)
+        button.appendChild(meta)
+        button.appendChild(detail)
+        return button
+      }
+
+      function renderCategory(name, issues) {
+        const target = categoryMap[name]
+        target.count.textContent = String(issues.length)
+        target.list.innerHTML = ""
+
+        if (!issues.length) {
+          const empty = document.createElement("p")
+          empty.className = "empty"
+          empty.textContent = "No issues found."
+          target.list.appendChild(empty)
+          return
+        }
+
+        issues.forEach(function (issue) {
+          target.list.appendChild(createIssueButton(issue))
+        })
+      }
+
+      function renderResults(result) {
+        clearAlerts()
+        document.getElementById("frame-name").textContent = result.frameName
+        document.getElementById("issue-count").textContent = String(result.totalIssues)
+        document.getElementById("summary-pill").textContent =
+          result.totalIssues === 0 ? "Healthy" : result.totalIssues + " issues"
+        document.getElementById("summary-meta").textContent =
+          "Resolve duplicates the frame and applies Guardian cleanup to the copy only."
+
+        renderCategory("Typography", result.issues.Typography)
+        renderCategory("Spacing", result.issues.Spacing)
+        renderCategory("Colors", result.issues.Colors)
+      }
+
+      document.getElementById("scan").addEventListener("click", function () {
+        post("scan-frame")
+      })
+
+      document.getElementById("resolve").addEventListener("click", function () {
+        const useDesignSystem = document.getElementById("design-system").checked
+        post("resolve-issues", { useDesignSystem: useDesignSystem })
+      })
+
+      document.getElementById("close").addEventListener("click", function () {
+        post("close")
+      })
+
+      window.onmessage = function (event) {
+        const message = event.data.pluginMessage
+        if (!message) {
+          return
+        }
+
+        if (message.type === "scan-results") {
+          renderResults(message.result)
+          return
+        }
+
+        if (message.type === "plugin-error") {
+          setError(message.message)
+          return
+        }
+
+        if (message.type === "plugin-status") {
+          setStatus(message.message)
+        }
+      }
+    </script>
+  </body>
+</html>
