@@ -29,7 +29,7 @@ and places it to the right of the original.
 ## Project Structure
 
 ```text
-design-checkk-plugin/
+design-guardian-plugin/
   manifest.json
   code.ts
   code.js
@@ -43,7 +43,7 @@ design-checkk-plugin/
 
 1. Open Figma
 2. Go to `Plugins` -> `Development` -> `Import plugin from manifest...`
-3. Select `design-checkk-plugin/manifest.json`
+3. Select `design-guardian-plugin/manifest.json`
 
 ## Tech Stack
 
