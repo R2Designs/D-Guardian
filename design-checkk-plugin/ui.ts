@@ -61,12 +61,25 @@ function clearAlerts() {
   setMessage("status-box", "", false)
 }
 
+function setResolving(isResolving: boolean) {
+  const resolveButton = document.getElementById("resolve") as HTMLButtonElement
+  const resolveLabel = document.getElementById("resolve-label") as HTMLSpanElement
+  const resolveSpinner = document.getElementById("resolve-spinner") as HTMLSpanElement
+
+  resolveButton.disabled = isResolving
+  resolveButton.setAttribute("aria-busy", String(isResolving))
+  resolveSpinner.classList.toggle("visible", isResolving)
+  resolveLabel.textContent = isResolving ? "Resolving..." : "Resolve All Issues"
+}
+
 function setError(message: string) {
+  setResolving(false)
   setMessage("status-box", "", false)
   setMessage("error-box", message, Boolean(message))
 }
 
 function setStatus(message: string) {
+  setResolving(false)
   setMessage("error-box", "", false)
   setMessage("status-box", message, Boolean(message))
 }
@@ -133,6 +146,7 @@ function renderResults(result: ScanResult) {
 
 ;(document.getElementById("resolve") as HTMLButtonElement).addEventListener("click", () => {
   const useDesignSystem = (document.getElementById("design-system") as HTMLInputElement).checked
+  setResolving(true)
   post("resolve-issues", { useDesignSystem })
 })
 

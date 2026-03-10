@@ -5,45 +5,23 @@
     <title>Design Guardian</title>
     <style>
       :root {
-        color-scheme: light;
-        --bg: #eef1ec;
-        --bg-accent: radial-gradient(circle at top left, rgba(14, 165, 233, 0.14), transparent 34%);
-        --surface: rgba(255, 255, 255, 0.84);
-        --surface-strong: rgba(255, 255, 255, 0.94);
-        --surface-alt: rgba(243, 246, 241, 0.92);
-        --text: #131816;
-        --muted: #6d7670;
-        --line: rgba(19, 24, 22, 0.08);
-        --accent: #0f9b8e;
-        --accent-strong: #0d7f74;
-        --accent-soft: rgba(15, 155, 142, 0.14);
-        --warning: #c2410c;
-        --ok: #0f766e;
-        --ok-soft: rgba(15, 118, 110, 0.1);
-        --shadow: 0 18px 44px rgba(27, 38, 33, 0.08);
-        --card-shadow: 0 10px 24px rgba(22, 34, 29, 0.06);
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          color-scheme: dark;
-          --bg: #101614;
-          --bg-accent: radial-gradient(circle at top left, rgba(44, 212, 192, 0.18), transparent 36%);
-          --surface: rgba(24, 31, 28, 0.9);
-          --surface-strong: rgba(28, 36, 32, 0.96);
-          --surface-alt: rgba(34, 43, 39, 0.96);
-          --text: #edf3ef;
-          --muted: #9aa59e;
-          --line: rgba(237, 243, 239, 0.08);
-          --accent: #2cd4c0;
-          --accent-strong: #5fe7d7;
-          --accent-soft: rgba(44, 212, 192, 0.16);
-          --warning: #ffab7a;
-          --ok: #76eadf;
-          --ok-soft: rgba(44, 212, 192, 0.12);
-          --shadow: 0 22px 48px rgba(0, 0, 0, 0.3);
-          --card-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
-        }
+        color-scheme: dark;
+        --bg: #0b100f;
+        --bg-accent: radial-gradient(circle at top left, rgba(44, 212, 192, 0.14), transparent 32%);
+        --surface: rgba(20, 27, 24, 0.94);
+        --surface-strong: rgba(24, 31, 28, 0.98);
+        --surface-alt: rgba(31, 40, 36, 0.98);
+        --text: #edf3ef;
+        --muted: #8d9a93;
+        --line: rgba(237, 243, 239, 0.08);
+        --accent: #22c7b6;
+        --accent-strong: #159989;
+        --accent-soft: rgba(34, 199, 182, 0.14);
+        --warning: #ffab7a;
+        --ok: #8af3e6;
+        --ok-soft: rgba(34, 199, 182, 0.12);
+        --shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+        --card-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
       }
 
       * {
@@ -52,16 +30,16 @@
 
       body {
         margin: 0;
-        padding: 16px;
+        padding: 10px;
         background: var(--bg-accent), linear-gradient(180deg, var(--bg), var(--bg));
         color: var(--text);
-        font: 12px/1.45 "Avenir Next", "Segoe UI", sans-serif;
+        font: 11px/1.4 "Avenir Next", "Segoe UI", sans-serif;
       }
 
       .panel {
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 10px;
       }
 
       .hero,
@@ -75,49 +53,58 @@
 
       .hero {
         background: linear-gradient(180deg, var(--surface-strong), var(--surface));
-        border-radius: 20px;
-        padding: 18px;
+        border-radius: 16px;
+        padding: 14px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 10px;
       }
 
       .eyebrow {
-        margin: 0 0 6px;
+        margin: 0 0 4px;
         color: var(--muted);
-        font-size: 11px;
+        font-size: 10px;
         text-transform: uppercase;
         letter-spacing: 0.08em;
       }
 
       h1 {
         margin: 0;
-        font-size: 28px;
-        line-height: 1;
+        font-size: 20px;
+        line-height: 1.05;
         letter-spacing: -0.04em;
       }
 
       .subcopy {
         margin: 0;
         color: var(--muted);
-        font-size: 14px;
+        font-size: 12px;
       }
 
       .summary {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         justify-content: space-between;
-        gap: 16px;
+        gap: 12px;
+      }
+
+      .summary-main {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+        flex: 1;
       }
 
       .score {
         display: flex;
         align-items: baseline;
-        gap: 8px;
+        gap: 7px;
+        flex-wrap: wrap;
       }
 
       .score strong {
-        font-size: 52px;
+        font-size: 38px;
         line-height: 1;
         letter-spacing: -0.06em;
       }
@@ -126,38 +113,39 @@
       .meta,
       .checkbox-label span {
         color: var(--muted);
-        font-size: 14px;
+        font-size: 12px;
       }
 
       .pill {
         display: inline-flex;
         align-items: center;
         border-radius: 999px;
-        padding: 8px 14px;
+        padding: 7px 10px;
         background: var(--accent-soft);
         color: var(--accent-strong);
         font-weight: 600;
+        align-self: center;
       }
 
       .controls {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 8px;
       }
 
       .actions {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         flex-wrap: wrap;
       }
 
       button {
         appearance: none;
         border: 1px solid var(--line);
-        border-radius: 12px;
+        border-radius: 10px;
         background: var(--surface-strong);
         color: var(--text);
-        padding: 10px 14px;
+        padding: 8px 11px;
         font: inherit;
         cursor: pointer;
         transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease,
@@ -176,12 +164,38 @@
         box-shadow: 0 12px 22px rgba(15, 155, 142, 0.22);
       }
 
+      button:disabled {
+        cursor: default;
+        opacity: 0.88;
+        transform: none;
+      }
+
+      .button-inline {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .spinner {
+        width: 12px;
+        height: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.28);
+        border-top-color: #ffffff;
+        border-radius: 999px;
+        display: none;
+        animation: spin 0.7s linear infinite;
+      }
+
+      .spinner.visible {
+        display: inline-block;
+      }
+
       .checkbox-row {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 12px 14px;
-        border-radius: 14px;
+        padding: 9px 10px;
+        border-radius: 12px;
         background: var(--surface-alt);
         border: 1px solid var(--line);
       }
@@ -193,16 +207,16 @@
       }
 
       input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         accent-color: var(--accent);
       }
 
       .error,
       .status {
         display: none;
-        padding: 12px 14px;
-        border-radius: 14px;
+        padding: 10px 11px;
+        border-radius: 12px;
       }
 
       .error {
@@ -222,7 +236,7 @@
 
       .section {
         background: linear-gradient(180deg, var(--surface-strong), var(--surface));
-        border-radius: 18px;
+        border-radius: 14px;
         overflow: hidden;
       }
 
@@ -231,20 +245,20 @@
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        padding: 14px 16px 12px;
+        padding: 10px 12px 9px;
         border-bottom: 1px solid var(--line);
       }
 
       .section-head h2 {
         margin: 0;
-        font-size: 13px;
+        font-size: 12px;
         letter-spacing: 0.02em;
       }
 
       .count {
-        min-width: 28px;
+        min-width: 22px;
         text-align: center;
-        padding: 4px 9px;
+        padding: 2px 7px;
         border-radius: 999px;
         background: var(--accent-soft);
         color: var(--muted);
@@ -252,12 +266,12 @@
       }
 
       .issues {
-        padding: 8px;
+        padding: 6px;
       }
 
       .issue,
       .empty {
-        border-radius: 14px;
+        border-radius: 12px;
         background: var(--surface-alt);
         box-shadow: var(--card-shadow);
       }
@@ -265,8 +279,8 @@
       .issue {
         width: 100%;
         text-align: left;
-        padding: 13px;
-        margin-bottom: 8px;
+        padding: 10px;
+        margin-bottom: 6px;
         border: 1px solid transparent;
       }
 
@@ -281,7 +295,7 @@
 
       .issue-title {
         margin: 0;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 600;
       }
 
@@ -294,29 +308,56 @@
       }
 
       .issue-meta {
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .empty {
-        padding: 12px 13px;
+        padding: 10px;
       }
 
       .footer {
         text-align: center;
-        font-size: 11px;
+        font-size: 10px;
+      }
+
+      .hero-top {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      @media (max-width: 360px) {
+        .summary {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .pill {
+          align-self: flex-start;
+        }
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+
+        to {
+          transform: rotate(360deg);
+        }
       }
     </style>
   </head>
   <body>
     <div class="panel">
       <section class="hero">
-        <div>
+        <div class="hero-top">
           <p class="eyebrow">Selected frame only</p>
-          <h1>Design Guardian 🛡</h1>
+          <h1>Design Guardian</h1>
           <p id="frame-name" class="subcopy">Select a frame to scan</p>
         </div>
         <div class="summary">
-          <div>
+          <div class="summary-main">
             <div class="score">
               <strong id="issue-count">0</strong>
               <span>Issues Found</span>
@@ -328,7 +369,12 @@
         <div class="controls">
           <div class="actions">
             <button id="scan" class="primary">Scan Frame</button>
-            <button id="resolve">Resolve All Issues</button>
+            <button id="resolve">
+              <span class="button-inline">
+                <span id="resolve-spinner" class="spinner"></span>
+                <span id="resolve-label">Resolve All Issues</span>
+              </span>
+            </button>
             <button id="close">Close</button>
           </div>
           <div class="checkbox-row">
@@ -367,7 +413,7 @@
         <div id="colors-list" class="issues"></div>
       </section>
 
-      <div class="footer">Click any issue to select that layer inside Figma.</div>
+      <div class="footer">Click any issue to select that layer inside Figma. Made with love by Raj</div>
     </div>
 
     <script>
@@ -401,12 +447,25 @@
         setMessage("status-box", "", false)
       }
 
+      function setResolving(isResolving) {
+        const resolveButton = document.getElementById("resolve")
+        const resolveLabel = document.getElementById("resolve-label")
+        const resolveSpinner = document.getElementById("resolve-spinner")
+
+        resolveButton.disabled = isResolving
+        resolveButton.setAttribute("aria-busy", String(isResolving))
+        resolveSpinner.classList.toggle("visible", isResolving)
+        resolveLabel.textContent = isResolving ? "Resolving..." : "Resolve All Issues"
+      }
+
       function setError(message) {
+        setResolving(false)
         setMessage("status-box", "", false)
         setMessage("error-box", message, Boolean(message))
       }
 
       function setStatus(message) {
+        setResolving(false)
         setMessage("error-box", "", false)
         setMessage("status-box", message, Boolean(message))
       }
@@ -475,6 +534,7 @@
 
       document.getElementById("resolve").addEventListener("click", function () {
         const useDesignSystem = document.getElementById("design-system").checked
+        setResolving(true)
         post("resolve-issues", { useDesignSystem: useDesignSystem })
       })
 

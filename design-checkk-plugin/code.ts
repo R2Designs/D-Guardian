@@ -328,7 +328,7 @@ async function applyTypographyFix(node: TextNode, useDesignSystem: boolean, text
   if (useDesignSystem) {
     const closestTextStyle = getClosestTextStyle(fontSize, textStyles)
     if (closestTextStyle) {
-      node.textStyleId = closestTextStyle.id
+      await node.setTextStyleIdAsync(closestTextStyle.id)
     } else {
       node.fontSize = closestFontSize(fontSize)
     }
@@ -359,15 +359,15 @@ function applySpacingFix(node: FrameNode, useDesignSystem: boolean) {
   }
 }
 
-function applyColorFix(node: SceneNode, paintStyles: PaintStyle[]) {
+async function applyColorFix(node: SceneNode, paintStyles: PaintStyle[]) {
   const solidPaint = getVisibleSolidPaint(node)
   if (!solidPaint || hasFillStyle(node)) {
     return
   }
 
   const closestStyle = getClosestPaintStyle(solidPaint, paintStyles)
-  if (closestStyle && "fillStyleId" in node) {
-    node.fillStyleId = closestStyle.id
+  if (closestStyle && "setFillStyleIdAsync" in node) {
+    await node.setFillStyleIdAsync(closestStyle.id)
   }
 }
 
@@ -390,7 +390,7 @@ async function resolveFrame(frame: FrameNode, useDesignSystem: boolean): Promise
       applySpacingFix(node, useDesignSystem)
     }
 
-    applyColorFix(node, localPaintStyles)
+    await applyColorFix(node, localPaintStyles)
   }
 
   return duplicate
@@ -446,10 +446,12 @@ async function handleResolve(useDesignSystem: boolean) {
     return
   }
 
-  await resolveFrame(frame, useDesignSystem)
+  const duplicate = await resolveFrame(frame, useDesignSystem)
+  figma.currentPage.selection = [duplicate]
+  figma.viewport.scrollAndZoomIntoView([duplicate])
   figma.notify("Guardian Clean frame created")
   postStatus("Guardian Clean frame created")
-  postScan(scanFrame(frame))
+  postScan(scanFrame(duplicate))
 }
 
 figma.ui.onmessage = async (message) => {
