@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Design Audit</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #eef1ec;
+        --bg-accent: radial-gradient(circle at top left, rgba(17, 157, 142, 0.16), transparent 32%);
+        --surface: rgba(255, 255, 255, 0.82);
+        --surface-strong: rgba(255, 255, 255, 0.94);
+        --surface-alt: rgba(245, 247, 243, 0.9);
+        --text: #121714;
+        --muted: #66706a;
+        --line: rgba(18, 23, 20, 0.08);
+        --accent: #119d8e;
+        --accent-strong: #0f766e;
+        --accent-soft: rgba(17, 157, 142, 0.14);
+        --pill-text: #0c6f64;
+        --danger: #c2410c;
+        --shadow: 0 18px 44px rgba(25, 38, 31, 0.08);
+        --issue-shadow: 0 8px 24px rgba(20, 36, 28, 0.06);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --bg: #111714;
+          --bg-accent: radial-gradient(circle at top left, rgba(27, 184, 165, 0.18), transparent 34%);
+          --surface: rgba(25, 31, 28, 0.9);
+          --surface-strong: rgba(29, 36, 32, 0.96);
+          --surface-alt: rgba(35, 43, 39, 0.96);
+          --text: #edf3ee;
+          --muted: #96a29b;
+          --line: rgba(237, 243, 238, 0.08);
+          --accent: #2cd4c0;
+          --accent-strong: #6be3d4;
+          --accent-soft: rgba(44, 212, 192, 0.16);
+          --pill-text: #b9fff6;
+          --danger: #ff9b6b;
+          --shadow: 0 22px 48px rgba(0, 0, 0, 0.34);
+          --issue-shadow: 0 10px 26px rgba(0, 0, 0, 0.2);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 16px;
+        background: var(--bg-accent), linear-gradient(180deg, var(--bg), var(--bg));
+        color: var(--text);
+        font: 12px/1.45 "Avenir Next", "Segoe UI", sans-serif;
+      }
+
+      .panel {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .hero {
+        background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .eyebrow {
+        margin: 0 0 6px;
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      .subcopy {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .score-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .score {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+
+      .score strong {
+        font-size: 54px;
+        line-height: 1;
+        letter-spacing: -0.06em;
+      }
+
+      .score span {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 9px 14px;
+        background: var(--accent-soft);
+        color: var(--pill-text);
+        font-weight: 600;
+        border: 1px solid transparent;
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 2px;
+      }
+
+      .hero-bottom {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .hero-main {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-width: 0;
+      }
+
+      button {
+        appearance: none;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface-strong);
+        color: var(--text);
+        padding: 10px 14px;
+        font: inherit;
+        cursor: pointer;
+        transition: transform 140ms ease, background-color 140ms ease, border-color 140ms ease,
+          box-shadow 140ms ease;
+      }
+
+      button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+      }
+
+      button.primary {
+        border-color: var(--accent);
+        background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+        color: #ffffff;
+        box-shadow: 0 12px 22px rgba(17, 157, 142, 0.22);
+      }
+
+      button.primary:hover {
+        box-shadow: 0 16px 28px rgba(17, 157, 142, 0.28);
+      }
+
+      .section {
+        background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 14px 16px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+
+      .count {
+        min-width: 28px;
+        border-radius: 999px;
+        padding: 4px 9px;
+        text-align: center;
+        background: var(--accent-soft);
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .issues {
+        padding: 8px;
+      }
+
+      .issue {
+        width: 100%;
+        text-align: left;
+        padding: 13px;
+        border-radius: 14px;
+        background: var(--surface-alt);
+        margin-bottom: 8px;
+        border: 1px solid transparent;
+        box-shadow: var(--issue-shadow);
+      }
+
+      .issue:last-child {
+        margin-bottom: 0;
+      }
+
+      .issue:hover {
+        border-color: var(--accent-soft);
+        background: var(--accent-soft);
+      }
+
+      .issue-title {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .issue-meta,
+      .issue-detail,
+      .empty {
+        margin: 4px 0 0;
+        color: var(--muted);
+      }
+
+      .issue-meta {
+        font-size: 11px;
+        letter-spacing: 0.01em;
+      }
+
+      .empty {
+        padding: 12px 13px;
+        background: var(--surface-alt);
+        border-radius: 14px;
+      }
+
+      .footer {
+        color: var(--muted);
+        text-align: center;
+        font-size: 11px;
+      }
+
+      .error {
+        display: none;
+        padding: 12px 14px;
+        border: 1px solid rgba(194, 65, 12, 0.18);
+        border-radius: 12px;
+        background: rgba(194, 65, 12, 0.08);
+        color: var(--danger);
+        box-shadow: var(--issue-shadow);
+      }
+
+      .error.visible {
+        display: block;
+      }
+
+      @media (max-width: 440px) {
+        .hero-bottom {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .score-row {
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="panel">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Current page audit</p>
+          <h1>Design Audit</h1>
+          <p id="page-name" class="subcopy">Scanning page...</p>
+        </div>
+        <div class="hero-bottom">
+          <div class="hero-main">
+            <div class="score-row">
+              <div class="score">
+                <strong id="score">100</strong>
+                <span>Health Score</span>
+              </div>
+            </div>
+            <div class="actions">
+              <button id="refresh" class="primary">Scan page</button>
+              <button id="close">Close</button>
+            </div>
+          </div>
+          <div id="summary-pill" class="pill">0 issues</div>
+        </div>
+      </section>
+
+      <div id="error-box" class="error"></div>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Typography</h2>
+          <span id="count-typography" class="count">0</span>
+        </div>
+        <div id="typography-list" class="issues"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Layout</h2>
+          <span id="count-layout" class="count">0</span>
+        </div>
+        <div id="layout-list" class="issues"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <h2>Colors</h2>
+          <span id="count-colors" class="count">0</span>
+        </div>
+        <div id="colors-list" class="issues"></div>
+      </section>
+
+      <div class="footer">Click any issue to select the layer in Figma.</div>
+    </div>
+
+    <script>
+      const categoryMap = {
+        Typography: {
+          list: document.getElementById("typography-list"),
+          count: document.getElementById("count-typography")
+        },
+        Layout: {
+          list: document.getElementById("layout-list"),
+          count: document.getElementById("count-layout")
+        },
+        Colors: {
+          list: document.getElementById("colors-list"),
+          count: document.getElementById("count-colors")
+        }
+      }
+
+      function post(type, payload = {}) {
+        parent.postMessage({ pluginMessage: { type, ...payload } }, "*")
+      }
+
+      function formatIssue(issue) {
+        const button = document.createElement("button")
+        button.className = "issue"
+        button.type = "button"
+        button.addEventListener("click", () => post("select-node", { nodeId: issue.nodeId }))
+
+        const title = document.createElement("p")
+        title.className = "issue-title"
+        title.textContent = issue.title
+
+        const meta = document.createElement("p")
+        meta.className = "issue-meta"
+        meta.textContent = issue.nodeName + " · " + issue.nodeType
+
+        const detail = document.createElement("p")
+        detail.className = "issue-detail"
+        detail.textContent = issue.detail
+
+        button.append(title, meta, detail)
+        return button
+      }
+
+      function renderCategory(name, issues) {
+        const target = categoryMap[name]
+        target.count.textContent = String(issues.length)
+        target.list.innerHTML = ""
+
+        if (!issues.length) {
+          const empty = document.createElement("p")
+          empty.className = "empty"
+          empty.textContent = "No issues found."
+          target.list.appendChild(empty)
+          return
+        }
+
+        issues.forEach((issue) => {
+          target.list.appendChild(formatIssue(issue))
+        })
+      }
+
+      function renderResults(result, pageName) {
+        const errorBox = document.getElementById("error-box")
+        errorBox.classList.remove("visible")
+        errorBox.textContent = ""
+        document.getElementById("page-name").textContent = pageName
+        document.getElementById("score").textContent = String(result.healthScore)
+        document.getElementById("summary-pill").textContent =
+          result.totalIssues + (result.totalIssues === 1 ? " issue" : " issues")
+
+        renderCategory("Typography", result.issues.Typography)
+        renderCategory("Layout", result.issues.Layout)
+        renderCategory("Colors", result.issues.Colors)
+      }
+
+      document.getElementById("refresh").addEventListener("click", () => post("run-audit"))
+      document.getElementById("close").addEventListener("click", () => post("close"))
+
+      window.onmessage = (event) => {
+        const message = event.data.pluginMessage
+        if (!message || message.type !== "audit-results") {
+          if (message && message.type === "audit-error") {
+            const errorBox = document.getElementById("error-box")
+            errorBox.textContent = message.message
+            errorBox.classList.add("visible")
+          }
+          return
+        }
+
+        renderResults(message.result, message.pageName)
+      }
+    </script>
+  </body>
+</html>
