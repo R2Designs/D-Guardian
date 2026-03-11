@@ -380,7 +380,7 @@
           <div class="checkbox-row">
             <label class="checkbox-label" for="design-system">
               <input id="design-system" type="checkbox" />
-              <span>Check with Design System</span>
+              <span>Exclude design system components</span>
             </label>
           </div>
         </div>
@@ -529,13 +529,14 @@
       }
 
       document.getElementById("scan").addEventListener("click", function () {
-        post("scan-frame")
+        const excludeDesignSystemComponents = document.getElementById("design-system").checked
+        post("scan-frame", { excludeDesignSystemComponents: excludeDesignSystemComponents })
       })
 
       document.getElementById("resolve").addEventListener("click", function () {
-        const useDesignSystem = document.getElementById("design-system").checked
+        const excludeDesignSystemComponents = document.getElementById("design-system").checked
         setResolving(true)
-        post("resolve-issues", { useDesignSystem: useDesignSystem })
+        post("resolve-issues", { excludeDesignSystemComponents: excludeDesignSystemComponents })
       })
 
       document.getElementById("close").addEventListener("click", function () {

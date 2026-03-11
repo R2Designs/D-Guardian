@@ -87,6 +87,37 @@ function hasFillStyle(node) {
   return "fillStyleId" in node && typeof node.fillStyleId === "string" && node.fillStyleId.length > 0;
 }
 
+function hasTextStyle(node) {
+  return typeof node.textStyleId === "string" && node.textStyleId.length > 0;
+}
+
+function isInsideInstance(node) {
+  let current = node;
+  while (current) {
+    if ("type" in current && current.type === "INSTANCE") {
+      return true;
+    }
+    current = "parent" in current ? current.parent : null;
+  }
+  return false;
+}
+
+function shouldSkipNode(node, excludeDesignSystemComponents) {
+  if (!excludeDesignSystemComponents) {
+    return false;
+  }
+
+  if (isInsideInstance(node)) {
+    return true;
+  }
+
+  if (node.type === "TEXT" && hasTextStyle(node)) {
+    return true;
+  }
+
+  return hasFillStyle(node);
+}
+
 function getNodeCornerRadius(node) {
   if (!("cornerRadius" in node) || typeof node.cornerRadius !== "number") {
     return null;
@@ -108,7 +139,7 @@ function isLineHeightNormalized(node, fontSize) {
   return Math.abs(node.lineHeight.value - expected) < 0.1;
 }
 
-function scanFrame(frame) {
+function scanFrame(frame, excludeDesignSystemComponents) {
   const issues = {
     Typography: [],
     Spacing: [],
@@ -117,6 +148,10 @@ function scanFrame(frame) {
 
   const nodes = collectNodes(frame);
   for (const node of nodes) {
+    if (shouldSkipNode(node, excludeDesignSystemComponents)) {
+      continue;
+    }
+
     if (node.type === "TEXT") {
       const fontSize = node.fontSize;
       if (typeof fontSize === "number") {
@@ -340,7 +375,7 @@ async function applyColorFix(node, paintStyles) {
   }
 }
 
-async function resolveFrame(frame, useDesignSystem) {
+async function resolveFrame(frame, excludeDesignSystemComponents) {
   const duplicate = frame.clone();
   duplicate.name = frame.name + " – Guardian Clean";
   duplicate.x = frame.x + frame.width + FRAME_GAP;
@@ -351,12 +386,16 @@ async function resolveFrame(frame, useDesignSystem) {
   const duplicateNodes = collectNodes(duplicate);
 
   for (const node of duplicateNodes) {
+    if (shouldSkipNode(node, excludeDesignSystemComponents)) {
+      continue;
+    }
+
     if (node.type === "TEXT") {
-      await applyTypographyFix(node, useDesignSystem, localTextStyles);
+      await applyTypographyFix(node, false, localTextStyles);
     }
 
     if (node.type === "FRAME") {
-      applySpacingFix(node, useDesignSystem);
+      applySpacingFix(node, false);
     }
 
     await applyColorFix(node, localPaintStyles);
@@ -397,7 +436,7 @@ async function selectIssueNode(nodeId) {
   figma.viewport.scrollAndZoomIntoView([node]);
 }
 
-async function handleScan() {
+async function handleScan(excludeDesignSystemComponents) {
   const frame = getSelectedFrame();
   if (!frame) {
     postError("Select a frame to scan");
@@ -405,33 +444,33 @@ async function handleScan() {
   }
 
   postStatus("");
-  postScan(scanFrame(frame));
+  postScan(scanFrame(frame, excludeDesignSystemComponents));
 }
 
-async function handleResolve(useDesignSystem) {
+async function handleResolve(excludeDesignSystemComponents) {
   const frame = getSelectedFrame();
   if (!frame) {
     postError("Select a frame to scan");
     return;
   }
 
-  const duplicate = await resolveFrame(frame, useDesignSystem);
+  const duplicate = await resolveFrame(frame, excludeDesignSystemComponents);
   figma.currentPage.selection = [duplicate];
   figma.viewport.scrollAndZoomIntoView([duplicate]);
   figma.notify("Guardian Clean frame created");
   postStatus("Guardian Clean frame created");
-  postScan(scanFrame(duplicate));
+  postScan(scanFrame(duplicate, excludeDesignSystemComponents));
 }
 
 figma.ui.onmessage = async (message) => {
   try {
     if (message.type === "scan-frame") {
-      await handleScan();
+      await handleScan(Boolean(message.excludeDesignSystemComponents));
       return;
     }
 
     if (message.type === "resolve-issues") {
-      await handleResolve(Boolean(message.useDesignSystem));
+      await handleResolve(Boolean(message.excludeDesignSystemComponents));
       return;
     }
 

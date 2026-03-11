@@ -141,13 +141,14 @@ function renderResults(result: ScanResult) {
 }
 
 ;(document.getElementById("scan") as HTMLButtonElement).addEventListener("click", () => {
-  post("scan-frame")
+  const excludeDesignSystemComponents = (document.getElementById("design-system") as HTMLInputElement).checked
+  post("scan-frame", { excludeDesignSystemComponents })
 })
 
 ;(document.getElementById("resolve") as HTMLButtonElement).addEventListener("click", () => {
-  const useDesignSystem = (document.getElementById("design-system") as HTMLInputElement).checked
+  const excludeDesignSystemComponents = (document.getElementById("design-system") as HTMLInputElement).checked
   setResolving(true)
-  post("resolve-issues", { useDesignSystem })
+  post("resolve-issues", { excludeDesignSystemComponents })
 })
 
 ;(document.getElementById("close") as HTMLButtonElement).addEventListener("click", () => {
